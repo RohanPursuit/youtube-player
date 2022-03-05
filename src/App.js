@@ -4,7 +4,13 @@ import axios from 'axios';
 import {io} from "socket.io-client"
 
 const URL = process.env.REACT_APP_API_URL
-const sock = io(URL)
+const authObj = {
+  userName: "xo",
+  password: "347"
+}
+const sock = io(URL, {
+  query: authObj
+})
 
 sock.on('connect', () => {
   console.log("You Connected")
@@ -15,6 +21,11 @@ function App() {
   
   const [str, setStr] = useState(URL)
   const [requests, setRequest] = useState([])
+  const [auth, setAuth] = useState({
+    userName: "",
+    password: ""
+  })
+  const [password, setPassword] = useState("")
   // let requests = useRef([])
   // const [playlist, setPlaylist] = useState([])
 
@@ -157,11 +168,26 @@ function App() {
     .catch(console.log)
   }
 
-  
+  function clientPassword() {
+    sock.emit("password", password).emit("reconnect")
+  }
+
+  console.log(password)
   return (
     <div>
-          <video onEnded={handleNextSong} src={str} autoPlay muted controls></video>
-          {!!requests.length && requests.map((el, i)=><div key={i} id={el} onClick={handlePlayNow}>{el}</div>)}
+         {auth.userName === authObj.userName & auth.password === authObj.password ? <><video onEnded={handleNextSong} src={str} autoPlay muted controls></video> 
+         {!!requests.length && requests.map((el, i)=><div key={i} id={el} onClick={handlePlayNow}>{el}</div>)}<input onChange={(event)=> setPassword(event.target.value)} type="text" required/><input onClick={clientPassword} type="submit"/></> : 
+         <form action="" onSubmit={(event) => {
+           event.preventDefault()
+            setAuth({
+              userName: event.target.userName.value,
+              password: event.target.password.value
+            })
+          }}>
+           <input id="userName" type="text" required/>
+           <input id="password" type="text" required/>
+           <input type="submit" />
+          </form>}
     </div>
   
   )
