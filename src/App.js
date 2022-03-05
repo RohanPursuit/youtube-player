@@ -1,13 +1,9 @@
 import './App.css';
 import {useState} from "react"
-// import ReactPlayer from 'react-player/lazy'
 import axios from 'axios';
-import { Route, Routes, Link } from 'react-router-dom';
 import {io} from "socket.io-client"
 
 const URL = process.env.REACT_APP_API_URL
-
-// const socket = io("http://localhost:3004")
 const sock = io(URL)
 
 sock.on('connect', () => {
@@ -164,31 +160,8 @@ function App() {
   
   return (
     <div>
-      <Routes>
-        <Route path="/" element={
-          <nav>
-            <Link to="/host">
-              Host
-            </Link>
-            <Link to="/remote">
-              Remote
-            </Link>
-          </nav>}
-        />
-        <Route exact path='/host'
-          element={<>
           <video onEnded={handleNextSong} src={str} autoPlay muted controls></video>
-          {/* <input onChange={handleInput} type="text" /> */}
-          {/* <button id="send" onClick={handleAddSong}>Send</button> */}
-          {/* <button id="send" onClick={sendMessage}>Send</button> */}
-          {/* <button id="next" onClick={sendMessage}>Next</button> */}
-          {/* <button onClick={handlePrevSong}>Prev</button> */}
-          {/* <button onClick={sendMessage}>test</button> */}
-          {!!requests.length && requests.map((el, i)=><div key={i} id={el} onClick={handlePlayNow}>{el}</div>)}</>}
-          />
-        {/* <Route path='/remote' element={<Remote/>}/> */}
-      </Routes>
-      
+          {!!requests.length && requests.map((el, i)=><div key={i} id={el} onClick={handlePlayNow}>{el}</div>)}
     </div>
   
   )
