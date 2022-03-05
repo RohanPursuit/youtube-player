@@ -45,3 +45,10 @@ audio {
 		transform: rotate(360deg);
 	}
 }
+
+input {
+	margin: 0px;
+	font-size: 25px;
+	width: 100vw;
+	height: 40px;
+}
