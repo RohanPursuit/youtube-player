@@ -21,7 +21,6 @@ function App() {
   const [requests, setRequest] = useState([])
   // let requests = useRef([])
   // const [playlist, setPlaylist] = useState([])
-  const [message, setMessage] = useState('')
 
   sock.off("server-message").on("server-message", (message) => {
     console.log(message)
@@ -64,14 +63,6 @@ function App() {
   //   }
   // })
   
-
-  function sendMessage(event) {
-    sock.emit("client-message", {
-      id: event.target.id,
-      requests: requests
-    })
-
-  }
 
   const handleReload = () => {
     if(str[str.length-1] === "/"){
@@ -170,11 +161,6 @@ function App() {
     .catch(console.log)
   }
 
-  const playVideo = (event) => {
-    console.log(event.target.play())
-  }
-
-  // runPlease(handleAddSong)
   
   return (
     <div>
@@ -190,7 +176,7 @@ function App() {
           </nav>}
         />
         <Route exact path='/host'
-          element={<><h1>{message}</h1>
+          element={<>
           <video onEnded={handleNextSong} src={str} autoPlay muted controls></video>
           {/* <input onChange={handleInput} type="text" /> */}
           {/* <button id="send" onClick={handleAddSong}>Send</button> */}
@@ -207,21 +193,5 @@ function App() {
   
   )
 }
-
-// function runPlease(handleAddSong){
-
-//   socket.on("server-message", async (message) => {
-//     console.log(message)
-//     if(message.id === 'send'){
-//       console.log(message.id)
-//       await handleAddSong(message) 
-//       return null
-//     }
-//       if(message.id === "next"){
-//       console.log(message.id)
-//       // handleNextSong()
-//     }
-//   })
-// }
 
 export default App;
