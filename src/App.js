@@ -5,9 +5,11 @@ import {io} from "socket.io-client"
 
 const URL = process.env.REACT_APP_API_URL
 const authObj = {
-  userName: "xo",
-  password: "347"
+  userName: process.env.REACT_APP_USERNAME,
+  password: process.env.REACT_APP_PASSWORD
 }
+
+console.log(authObj, URL)
 const sock = io(URL, {
   query: authObj
 })
@@ -93,18 +95,19 @@ function App() {
 
   const handleAddSong = (message) => {
     console.log("handleAddSong Ran")
-    axios.post(URL, {
-      add: true,
-      next: false,
-      prev: false,
-      requests: message.requests, //"http://www.youtube.com/watch?v={id}"
-    })
-    .then(()=> {
-      setRequest(message.requests)
-      // requests.current = message.requests
+    // axios.post(URL, {
+    //   add: true,
+    //   next: false,
+    //   prev: false,
+    //   requests: message.requests, //"http://www.youtube.com/watch?v={id}"
+    // })
+    // .then(()=> {
+    //   setRequest(message.requests.reverse())
+    //   // requests.current = message.requests
       
-    })
-    .catch(console.log)
+    // })
+    // .catch(console.log)
+    setRequest(message.requests.reverse())
 
     // axios.get("http://192.168.1.159:3004/playlist")
     // .then((response) => {
@@ -120,13 +123,21 @@ function App() {
       prev: false,
       requests: requests //requests.current
     })
-    .then(() => {
-      setTimeout(()=> {
-        console.log("ran")
-        handleReload()
-      }, 3000)
-      
+    .then((response) => {
+      console.time("Response")
+      const data = response.data
+      handleReload()
+      console.log("Returned ",data)  
+      console.timeEnd("Response")
     })
+    // then(() =>{
+    //   console.time("timeOut")
+    //   setTimeout(()=> {
+    //     console.log("video reloaded")
+    //     handleReload()
+    //     console.timeEnd("timeOut")
+    //   }, 4000)
+    // })
     .catch(console.log)
   }
 
