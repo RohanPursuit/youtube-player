@@ -20,7 +20,7 @@ sock.on('connect', () => {
 
 function App() {
 
-  
+  const [volume, setVolume] = useState(.2)
   const [str, setStr] = useState(URL)
   const [requests, setRequest] = useState([])
   const [auth, setAuth] = useState({
@@ -49,6 +49,13 @@ function App() {
       console.log(message.id)
       handlePrevSong()
     }
+
+    if(message.volume){
+      document.querySelector("video").volume = volume + message.volume
+      setVolume(volume + message.volume)
+    }
+    
+ 
 
     // console.log(/[0-9]/.test(message.id) )
     if(/[0-9]/.test(message.id)){
@@ -186,7 +193,7 @@ function App() {
   console.log(password)
   return (
     <div>
-         {auth.userName === authObj.userName & auth.password === authObj.password ? <><video onEnded={handleNextSong} src={str} autoPlay muted controls></video> 
+         {auth.userName === authObj.userName & auth.password === authObj.password ? <><video onLoad={(event)=> event.target.volume = 0.2} onEnded={handleNextSong} src={str} autoPlay muted controls></video> 
          {!!requests.length && requests.map((el, i)=><div key={i} id={el} onClick={handlePlayNow}>{el}</div>)}<input onChange={(event)=> setPassword(event.target.value)} type="text" required/><input onClick={clientPassword} type="submit"/></> : 
          <form action="" onSubmit={(event) => {
            event.preventDefault()
