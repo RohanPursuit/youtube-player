@@ -1,5 +1,5 @@
 import './App.css';
-import {useState} from "react"
+import {useState, useRef} from "react"
 import axios from 'axios';
 import {io} from "socket.io-client"
 
@@ -20,7 +20,7 @@ sock.on('connect', () => {
 
 function App() {
 
-  const [volume, setVolume] = useState(.2)
+  const volume = useRef(0.2)
   const [str, setStr] = useState(URL)
   const [requests, setRequest] = useState([])
   const [auth, setAuth] = useState({
@@ -50,9 +50,10 @@ function App() {
       handlePrevSong()
     }
 
-    if(message.volume){
-      document.querySelector("video").volume = volume + message.volume
-      setVolume(volume + message.volume)
+    if((volume.current > 0.1 && message.volume < 0 )|| (volume.current < .98 && message.volume > 0)){
+      volume.current = Math.round((volume.current + message.volume) * 100)/100
+      document.querySelector("video").volume = volume.current
+      console.log(volume)
     }
     
  
